@@ -20,10 +20,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusBottomEnd="@dimen/input_corner_radius"
+            app:boxCornerRadiusBottomStart="@dimen/input_corner_radius"
+            app:boxCornerRadiusTopEnd="@dimen/input_corner_radius"
+            app:boxCornerRadiusTopStart="@dimen/input_corner_radius"
             app:endIconMode="clear_text"
             app:hintEnabled="false"
             app:startIconDrawable="@drawable/ic_baseline_search_24">
@@ -32,7 +32,7 @@
                 android:id="@+id/etSearchRules"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="搜索规则 Payload 或代理出站"
+                android:hint="@string/dashboard_search_rules_hint"
                 android:imeOptions="actionDone"
                 android:inputType="textNoSuggestions"
                 android:paddingTop="10dp"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="共 0 条路由规则"
+            tools:text="共 0 条路由规则"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/primaryOrTextSecondary" />
 

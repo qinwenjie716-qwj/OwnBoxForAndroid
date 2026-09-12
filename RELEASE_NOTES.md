@@ -1,6 +1,6 @@
-# Own for Android v2.6.10 预览版 (v2.6.10-preview)
+# Own for Android v2.6.11 预览版 (v2.6.11-preview)
 
-* 修复 XHTTP 协议在 stream-one 模式与分块传输下的握手挂起与断流问题
-* 规范 REALITY 协议参数与 uTLS Chrome 指纹协商以避免握手超时
-* 调优 Hysteria 2 的 QUIC Keep-Alive 与端口跳跃策略以增强移动弱网稳定性
+* 全面统一全局卡片圆角、边框与内边距至 Material 3 视觉规范
+* 规范弹窗、输入框、按钮与操作组件的交互层级与布局间距
+* 优化浅色、深色与 AMOLED 纯黑模式下的边框与对比度渲染表现
 

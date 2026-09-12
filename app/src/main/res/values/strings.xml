@@ -964,4 +964,5 @@
     <string name="dashboard_log_pause">Pause Logs</string>
     <string name="dashboard_log_resume">Resume Logs</string>
     <string name="dashboard_log_clear">Clear Logs</string>
+    <string name="dashboard_search_rules_hint">Search rule payload or outbound</string>
 </resources>

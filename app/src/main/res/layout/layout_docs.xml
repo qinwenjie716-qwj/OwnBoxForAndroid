@@ -14,13 +14,14 @@
         android:id="@+id/search_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
-        app:strokeWidth="0dp">
+        app:cardCornerRadius="@dimen/card_corner_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:strokeColor="@color/card_stroke"
+        app:strokeWidth="@dimen/card_stroke_width">
 
         <LinearLayout
             android:layout_width="match_parent"

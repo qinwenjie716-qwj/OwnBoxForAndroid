@@ -7,7 +7,8 @@
     <dimen name="card_elevation">1dp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
     <dimen name="card_stroke_width_selected">2dp</dimen>
-    <dimen name="profile_card_corner_radius">10dp</dimen>
+    <dimen name="profile_card_corner_radius">16dp</dimen>
+    <dimen name="chip_corner_radius">8dp</dimen>
     <dimen name="profile_card_selected_bar_width">5dp</dimen>
     <dimen name="profile_card_elevation_classic">2dp</dimen>
 
