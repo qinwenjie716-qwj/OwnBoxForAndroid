@@ -33,6 +33,8 @@ import io.nekohasekai.sagernet.fmt.wireguard.WireGuardBean
 import io.nekohasekai.sagernet.fmt.wireguard.buildSingBoxEndpointWireGuardBean
 import io.nekohasekai.sagernet.ktx.Logs
 import io.nekohasekai.sagernet.ktx.isIpAddress
+import io.nekohasekai.sagernet.ktx.isIpAddressV6
+import io.nekohasekai.sagernet.ktx.unwrapIPV6Host
 import io.nekohasekai.sagernet.ktx.mkPort
 import io.nekohasekai.sagernet.ktx.runOnMainDispatcher
 import io.nekohasekai.sagernet.utils.PackageCache
@@ -421,6 +423,95 @@ fun buildConfig(
 
             else -> address
         }
+    }
+
+    fun extractDnsTargets(dnsList: List<String>, isRemote: Boolean): Pair<Set<String>, Set<String>> {
+        val domains = mutableSetOf<String>()
+        val ips = mutableSetOf<String>()
+
+        if (isRemote) {
+            domains.addAll(
+                listOf(
+                    "dns.google",
+                    "cloudflare-dns.com",
+                    "one.one.one.one",
+                    "dns.quad9.net",
+                    "dns.opendns.com"
+                )
+            )
+            ips.addAll(
+                listOf(
+                    "8.8.8.8", "8.8.4.4",
+                    "1.1.1.1", "1.0.0.1",
+                    "9.9.9.9", "149.112.112.112",
+                    "208.67.222.222", "208.67.220.220",
+                    "2001:4860:4860::8888", "2001:4860:4860::8844",
+                    "2606:4700:4700::1111", "2606:4700:4700::1001",
+                    "2620:fe::fe", "2620:fe::9",
+                    "2620:119:35::35", "2620:119:53::53"
+                )
+            )
+        } else {
+            domains.addAll(
+                listOf(
+                    "dns.alidns.com",
+                    "doh.pub",
+                    "dot.pub",
+                    "doh.360.cn",
+                    "dot.360.cn"
+                )
+            )
+            ips.addAll(
+                listOf(
+                    "223.5.5.5", "223.6.6.6",
+                    "119.29.29.29", "1.12.12.12", "120.53.53.53",
+                    "114.114.114.114", "114.114.115.115",
+                    "180.76.76.76",
+                    "1.2.4.8", "210.2.4.8",
+                    "2400:3200::1", "2400:3200:baba::1"
+                )
+            )
+        }
+
+        dnsList.forEach { raw ->
+            val trimmed = raw.trim()
+            if (trimmed.isBlank() || trimmed.startsWith("#")) return@forEach
+            if (trimmed == "local" || trimmed == "hosts" || trimmed == "fakeip") return@forEach
+
+            val host: String? = if (trimmed.contains("://")) {
+                val uri = runCatching { java.net.URI(trimmed) }.getOrNull()
+                uri?.host ?: trimmed.substringAfter("://").substringBefore("/").substringBefore(":")
+            } else {
+                val rawNoPath = trimmed.substringBefore("/")
+                if (rawNoPath.startsWith("[") && rawNoPath.contains("]")) {
+                    rawNoPath.substringAfter("[").substringBefore("]")
+                } else if (rawNoPath.contains(":") && rawNoPath.indexOf(":") == rawNoPath.lastIndexOf(":")) {
+                    rawNoPath.substringBefore(":")
+                } else {
+                    rawNoPath
+                }
+            }
+
+            val cleanHost = host?.trim()?.unwrapIPV6Host()?.lowercase()
+            if (!cleanHost.isNullOrBlank()) {
+                if (cleanHost.isIpAddress()) {
+                    ips.add(cleanHost)
+                } else {
+                    domains.add(cleanHost)
+                }
+            }
+        }
+
+        val formattedCidrs = ips.mapNotNull { ip ->
+            val clean = ip.trim().unwrapIPV6Host()
+            if (ipv6Mode == IPv6Mode.DISABLE && clean.isIpAddressV6()) return@mapNotNull null
+            if (ipv6Mode == IPv6Mode.ONLY && !clean.isIpAddressV6()) return@mapNotNull null
+            if (clean.contains("/")) clean
+            else if (clean.isIpAddressV6()) "$clean/128"
+            else "$clean/32"
+        }.toSet()
+
+        return Pair(domains, formattedCidrs)
     }
 
     fun buildDnsServer(
@@ -1227,7 +1318,27 @@ fun buildConfig(
                             }
                         }
 
-                        0L -> {
+                        -2L -> {
+                            if (shouldAddDnsRule) {
+                                userDNSRuleList += makeDnsRuleObj().apply {
+                                    action = "reject"
+                                }
+                            }
+
+                            if (rule_set != null && rulesetTags.isNotEmpty()) {
+                                for (tag in rule_set) {
+                                    val tagInfo = rulesetTags.find { it.first == tag }
+                                    if (tag.startsWith("ruleset-") && tagInfo != null && !tagInfo.second) {
+                                        userDNSRuleList += DNSRule_DefaultOptions().apply {
+                                            rule_set = mutableListOf(tag)
+                                            action = "reject"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        else -> {
                             if (shouldAddDnsRule) {
                                 if (useFakeDns) userDNSRuleList += makeDnsRuleObj().apply {
                                     server = "dns-fake"
@@ -1256,26 +1367,6 @@ fun buildConfig(
                                                 rule_set = mutableListOf(tag)
                                                 server = "dns-remote"
                                             }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        -2L -> {
-                            if (shouldAddDnsRule) {
-                                userDNSRuleList += makeDnsRuleObj().apply {
-                                    action = "reject"
-                                }
-                            }
-
-                            if (rule_set != null && rulesetTags.isNotEmpty()) {
-                                for (tag in rule_set) {
-                                    val tagInfo = rulesetTags.find { it.first == tag }
-                                    if (tag.startsWith("ruleset-") && tagInfo != null && !tagInfo.second) {
-                                        userDNSRuleList += DNSRule_DefaultOptions().apply {
-                                            rule_set = mutableListOf(tag)
-                                            action = "reject"
                                         }
                                     }
                                 }
@@ -1450,37 +1541,100 @@ fun buildConfig(
                     query_type = listOf("AAAA")
                     action = "reject"
                 })
-                route.rules.add(0, Rule_DefaultOptions().apply {
-                    ip_version = 6
-                    action = "reject"
-                })
             } else if (ipv6Mode == IPv6Mode.ONLY) {
                 dns.rules.add(0, DNSRule_DefaultOptions().apply {
                     query_type = listOf("A")
                     action = "reject"
                 })
-                route.rules.add(0, Rule_DefaultOptions().apply {
+            }
+
+            // 提取 directDNS 与 remoteDns 的域名及 IP/CIDR 目标
+            val (rawDirectDomains, directIps) = extractDnsTargets(directDNS, false)
+            val (rawRemoteDomains, remoteIps) = extractDnsTargets(remoteDns, true)
+            val directDomains = rawDirectDomains - rawRemoteDomains
+            val remoteDomains = rawRemoteDomains
+
+            // 构建最优先前置路由规则（须位于所有用户规则之前）
+            val topRouteRules = mutableListOf<Rule_DefaultOptions>()
+
+            // 1. sing-box 1.13：sniff（须位于规则最前）
+            if (needSniff) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
+                    action = "sniff"
+                })
+            }
+
+            // 2. resolve 动作：强制单栈解析杜绝远端 VPS 双栈泄露
+            if (DataStore.resolveDestination || ipv6Mode == IPv6Mode.DISABLE || ipv6Mode == IPv6Mode.ONLY) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
+                    action = "resolve"
+                    strategy = genDomainStrategy(true)
+                })
+            }
+
+            // 3. hijack-dns 拦截入站 DNS 流量进入内置 DNS 引擎
+            topRouteRules.add(Rule_DefaultOptions().apply {
+                port = listOf(53)
+                action = "hijack-dns"
+            })
+            topRouteRules.add(Rule_DefaultOptions().apply {
+                protocol = listOf("dns")
+                action = "hijack-dns"
+            })
+
+            // 4. IP 版本禁用规则
+            if (ipv6Mode == IPv6Mode.DISABLE) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
+                    ip_version = 6
+                    action = "reject"
+                })
+            } else if (ipv6Mode == IPv6Mode.ONLY) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
                     ip_version = 4
                     action = "reject"
                 })
             }
-            route.rules.add(0, Rule_DefaultOptions().apply {
-                protocol = listOf("dns")
-                action = "hijack-dns"
-            })
-            route.rules.add(0, Rule_DefaultOptions().apply {
+
+            // 5. 直连 DNS 硬隔离规则（锁定 direct，绝不走代理）
+            if (directDomains.isNotEmpty()) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
+                    domain = directDomains.toList()
+                    outbound = TAG_DIRECT
+                })
+            }
+            if (directIps.isNotEmpty()) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
+                    ip_cidr = directIps.toList()
+                    outbound = TAG_DIRECT
+                })
+            }
+
+            // 6. 远程 DNS 硬隔离规则（强制锁定 mainProxyTag，绝不回退或走国内直连）
+            if (remoteDomains.isNotEmpty()) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
+                    domain = remoteDomains.toList()
+                    outbound = mainProxyTag
+                })
+            }
+            if (remoteIps.isNotEmpty()) {
+                topRouteRules.add(Rule_DefaultOptions().apply {
+                    ip_cidr = remoteIps.toList()
+                    outbound = mainProxyTag
+                })
+            }
+
+            // 7. 未拦截远程 DNS 兜底保护（port 53 / protocol dns 流量强制走代理）
+            topRouteRules.add(Rule_DefaultOptions().apply {
                 port = listOf(53)
-                action = "hijack-dns"
+                outbound = mainProxyTag
             })
-            // sing-box 1.13：sniff / 解析目标地址迁移为路由规则动作（须位于规则最前）。
-            // 启用 resolve 动作：当开启 resolveDestination 或处于 IPv6 禁用/仅 IPv6 模式时强制单栈解析，杜绝远端 VPS 建立异构双栈连接导致泄漏。
-            if (DataStore.resolveDestination || ipv6Mode == IPv6Mode.DISABLE || ipv6Mode == IPv6Mode.ONLY) route.rules.add(0, Rule_DefaultOptions().apply {
-                action = "resolve"
-                strategy = genDomainStrategy(true)
+            topRouteRules.add(Rule_DefaultOptions().apply {
+                protocol = listOf("dns")
+                outbound = mainProxyTag
             })
-            if (needSniff) route.rules.add(0, Rule_DefaultOptions().apply {
-                action = "sniff"
-            })
+
+            route.rules.addAll(0, topRouteRules)
+
             if (DataStore.bypassLanInCore) {
                 route.rules.add(Rule_DefaultOptions().apply {
                     outbound = TAG_BYPASS
