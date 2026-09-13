@@ -2921,7 +2921,9 @@ class ConfigurationFragment @JvmOverloads constructor(
                 val btnSpeedTest = dialogView.findViewById<View>(R.id.action_speed_test_node)
                 val btnEdit = dialogView.findViewById<View>(R.id.action_edit_node)
                 val btnQr = dialogView.findViewById<View>(R.id.action_qr_code_node)
-                val btnExportClipboard = dialogView.findViewById<View>(R.id.action_export_clipboard_node)
+                val btnExportStd = dialogView.findViewById<View>(R.id.action_export_clipboard_std)
+                val btnExportSn = dialogView.findViewById<View>(R.id.action_export_clipboard_sn)
+                val btnExportFile = dialogView.findViewById<View>(R.id.action_export_file_node)
                 val btnDelete = dialogView.findViewById<View>(R.id.action_delete_node)
 
                 tvName.text = proxyEntity.displayName()
@@ -2960,38 +2962,67 @@ class ConfigurationFragment @JvmOverloads constructor(
                     }
                 }
 
-                if (!proxyEntity.haveLink()) {
+                val hasLink = proxyEntity.haveLink()
+                val hasStd = proxyEntity.haveStandardLink()
+
+                if (!hasLink) {
                     btnQr.isGone = true
-                    btnExportClipboard.isGone = true
+                    btnExportStd.isGone = true
+                    btnExportSn.isGone = true
                 } else {
+                    btnExportStd.isGone = !hasStd
+
                     btnQr.setOnClickListener {
                         dialog.dismiss()
                         try {
-                            currentName = proxyEntity.displayName() ?: ""
-                            val link = if (proxyEntity.haveStandardLink()) {
-                                proxyEntity.toStdLink()
-                            } else {
-                                proxyEntity.requireBean().toUniversalLink()
-                            }
-                            showCode(link)
+                            val stdLink = if (hasStd) proxyEntity.toStdLink() else null
+                            val universalLink = proxyEntity.requireBean().toUniversalLink()
+                            val name = proxyEntity.displayName() ?: ""
+                            val typeName = proxyEntity.displayType()
+                            QRCodeDialog(
+                                stdLink = stdLink,
+                                universalLink = universalLink,
+                                displayName = name,
+                                displayType = typeName,
+                                typeInt = proxyEntity.type
+                            ).showAllowingStateLoss(parentFragmentManager)
                         } catch (e: Exception) {
                             Logs.w(e)
                             safeSnackbar(e.readableMessage)
                         }
                     }
-                    btnExportClipboard.setOnClickListener {
+
+                    btnExportStd.setOnClickListener {
                         dialog.dismiss()
                         try {
-                            val link = if (proxyEntity.haveStandardLink()) {
-                                proxyEntity.toStdLink()
-                            } else {
-                                proxyEntity.requireBean().toUniversalLink()
-                            }
-                            export(link)
+                            export(proxyEntity.toStdLink())
                         } catch (e: Exception) {
                             Logs.w(e)
                             safeSnackbar(e.readableMessage)
                         }
+                    }
+
+                    btnExportSn.setOnClickListener {
+                        dialog.dismiss()
+                        try {
+                            export(proxyEntity.requireBean().toUniversalLink())
+                        } catch (e: Exception) {
+                            Logs.w(e)
+                            safeSnackbar(e.readableMessage)
+                        }
+                    }
+                }
+
+                btnExportFile.setOnClickListener {
+                    dialog.dismiss()
+                    try {
+                        val cfg = proxyEntity.exportConfig()
+                        DataStore.serverConfig = cfg.first
+                        val targetLauncher = (parentFragment as ConfigurationFragment).exportConfig
+                        startFilesForResult(targetLauncher, cfg.second)
+                    } catch (e: Exception) {
+                        Logs.w(e)
+                        safeSnackbar(e.readableMessage)
                     }
                 }
 
@@ -3347,7 +3378,7 @@ class ConfigurationFragment @JvmOverloads constructor(
 
     }
 
-    private val exportConfig =
+    internal val exportConfig =
         registerForActivityResult(ActivityResultContracts.CreateDocument()) { data ->
             if (data != null) {
                 runOnDefaultDispatcher {

@@ -881,4 +881,16 @@
     <string name="dashboard_log_resume">继续日志</string>
     <string name="dashboard_log_clear">清空日志</string>
     <string name="dashboard_search_rules_hint">搜索规则 Payload 或代理出站</string>
+    <string name="export_standard_link">复制标准链接</string>
+    <string name="export_standard_link_sum">兼容通用客户端 (vless://, ss://, vmess:// 等)</string>
+    <string name="export_sn_link">复制 SN Link</string>
+    <string name="export_sn_link_sum">Sing-box / Neko 专用链接格式 (sn://)</string>
+    <string name="export_to_file">导出为配置文件</string>
+    <string name="export_to_file_sum">保存当前节点为 .json 配置文件</string>
+    <string name="share_qr_sum">支持标准格式与 SN Link 双模切换</string>
+    <string name="qrcode_format_standard">标准格式</string>
+    <string name="qrcode_format_sn">SN Link</string>
+    <string name="qrcode_standard_hint">标准协议链接格式（兼容各类通用客户端）</string>
+    <string name="qrcode_sn_hint">Sing-box &amp; Neko 专用序列化链接（sn://）</string>
+    <string name="copy_current_link">复制链接</string>
 </resources>

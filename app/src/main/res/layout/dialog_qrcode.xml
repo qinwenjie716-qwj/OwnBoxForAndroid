@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="16dp">
+
+    <!-- Header: Name, Type Badge, Close -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_qrcode_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="Hong Kong 01 [VIP]" />
+
+            <TextView
+                android:id="@+id/tv_qrcode_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="VLESS"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btn_close_qrcode"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close"
+            android:padding="2dp"
+            android:src="@drawable/ic_navigation_close"
+            app:tint="?android:attr/textColorSecondary" />
+
+    </LinearLayout>
+
+    <!-- Format Tabs (Standard / SN Link) -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/qrcode_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="12dp"
+        android:background="@android:color/transparent"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="?attr/colorPrimary"
+        app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="?attr/colorPrimary"
+        app:tabTextAppearance="@style/Widget.SagerNet.TabLayout.TextAppearance"
+        app:tabTextColor="?android:attr/textColorSecondary" />
+
+    <!-- QR Code White Safe Container -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:strokeColor="#1F000000"
+        app:strokeWidth="1dp">
+
+        <ImageView
+            android:id="@+id/iv_qrcode"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/share_qr_nfc"
+            android:padding="12dp"
+            tools:src="@drawable/ic_action_qrcode" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Format Hint -->
+    <TextView
+        android:id="@+id/tv_qrcode_format_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="12sp"
+        tools:text="标准协议链接格式（兼容各类通用客户端）" />
+
+    <!-- Action Buttons Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_copy_qrcode_link"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:text="@string/copy_current_link"
+            android:textAllCaps="false"
+            android:textSize="13sp"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_content_copy"
+            app:iconGravity="textStart"
+            app:iconSize="18dp" />
+
+        <Space
+            android:layout_width="12dp"
+            android:layout_height="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_dismiss_qrcode"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="@string/close"
+            android:textAllCaps="false"
+            android:textSize="13sp"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
