@@ -309,6 +309,7 @@
     <color name="md3_text_primary">#1C1B1F</color>
     <color name="md3_text_secondary">#49454F</color>
     <color name="md3_top_app_bar">#FAFAFA</color>
+    <color name="nav_icon_unselected">#757575</color>
 
     <!-- 卡片默认细边框：约 12% 黑（低对比分隔线），夜间见 values-night/colors.xml -->
     <color name="card_stroke">#29000000</color>

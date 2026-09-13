@@ -213,7 +213,7 @@
         app:itemShapeInsetEnd="8dp"
         app:itemShapeInsetTop="3dp"
         app:itemShapeInsetBottom="3dp"
-        app:itemTextColor="@color/navigation_icon"
+        app:itemTextColor="@color/navigation_text"
         app:menu="@menu/main_drawer_menu" />
 
     <com.google.android.material.navigation.NavigationView
@@ -230,7 +230,7 @@
         app:itemShapeInsetEnd="8dp"
         app:itemShapeInsetTop="3dp"
         app:itemShapeInsetBottom="3dp"
-        app:itemTextColor="@color/navigation_icon"
+        app:itemTextColor="@color/navigation_text"
         app:menu="@menu/main_drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

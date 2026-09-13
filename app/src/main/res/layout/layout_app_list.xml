@@ -23,10 +23,12 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="?attr/colorSurface"
                 android:elevation="0dp"
                 android:theme="?actionBarTheme"
                 android:touchscreenBlocksFocus="false"
+                app:titleTextColor="?android:attr/textColorPrimary"
+                app:navigationIconTint="?android:attr/textColorPrimary"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
                 app:title="@string/app_name" />

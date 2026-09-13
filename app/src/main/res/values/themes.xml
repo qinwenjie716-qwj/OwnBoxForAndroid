@@ -5,6 +5,8 @@
         <item name="actionModeCloseDrawable">@drawable/ic_navigation_close</item>
         <item name="colorButtonNormal">?colorAccent</item>
         <item name="android:navigationBarColor">?colorPrimaryDark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="colorPrimary">@color/material_pink_500</item>
         <item name="colorPrimaryDark">@color/material_pink_700</item>
         <item name="colorAccent">@color/material_pink_accent_200</item>
@@ -132,12 +134,14 @@
 
         <item name="fabColorBackground">?colorPrimary</item>
         <item name="selectedColorPrimary">?colorPrimary</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="tabTextColor">#99FFFFFF</item>
-        <item name="tabSelectedTextColor">@color/white</item>
-        <item name="tabIndicatorColor">@color/white</item>
-        <item name="tabRippleColor">@color/white</item>
-        <item name="whiteOrTextPrimary">@color/white</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.SagerNet.Toolbar</item>
+        <item name="appBarLayoutStyle">@style/Widget.SagerNet.AppBarLayout</item>
+        <item name="toolbarStyle">@style/Widget.SagerNet.Toolbar</item>
+        <item name="tabTextColor">?android:attr/textColorSecondary</item>
+        <item name="tabSelectedTextColor">?colorPrimary</item>
+        <item name="tabIndicatorColor">?colorPrimary</item>
+        <item name="tabRippleColor">?colorPrimary</item>
+        <item name="whiteOrTextPrimary">?android:attr/textColorPrimary</item>
 
         <item name="windowActionModeOverlay">true</item>
 
@@ -217,12 +221,12 @@
 
     <!-- MD3 Immersive AppBar & Toolbar styles -->
     <style name="Widget.SagerNet.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Surface">
-        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:background">?attr/colorSurface</item>
         <item name="elevation">0dp</item>
     </style>
 
     <style name="Widget.SagerNet.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
-        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:background">?attr/colorSurface</item>
         <item name="titleTextColor">?android:attr/textColorPrimary</item>
         <item name="subtitleTextColor">?android:attr/textColorSecondary</item>
         <item name="navigationIconTint">?android:attr/textColorPrimary</item>
@@ -230,6 +234,8 @@
     </style>
 
     <style name="ThemeOverlay.SagerNet.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
+        <item name="colorSurface">?attr/colorSurface</item>
+        <item name="android:colorBackground">?attr/colorSurface</item>
         <item name="android:textColorPrimary">?android:attr/textColorPrimary</item>
         <item name="android:textColorSecondary">?android:attr/textColorSecondary</item>
         <item name="actionMenuTextColor">?android:attr/textColorPrimary</item>

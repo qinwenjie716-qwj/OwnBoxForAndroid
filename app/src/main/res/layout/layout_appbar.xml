@@ -4,7 +4,7 @@
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/colorBackground"
+    android:background="?attr/colorSurface"
     app:elevation="0dp"
     app:liftOnScroll="true">
 
@@ -12,7 +12,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?android:attr/colorBackground"
+        android:background="?attr/colorSurface"
         android:theme="?actionBarTheme"
         android:touchscreenBlocksFocus="false"
         app:titleTextColor="?android:attr/textColorPrimary"

@@ -9,6 +9,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import io.nekohasekai.sagernet.R
+import io.nekohasekai.sagernet.ktx.getColorAttr
 import io.nekohasekai.sagernet.utils.Theme
 
 open class ToolbarFragment : Fragment {
@@ -27,19 +28,17 @@ open class ToolbarFragment : Fragment {
             toolbar.setNavigationOnClickListener {
                 (activity as? MainActivity)?.binding?.drawerLayout?.openDrawer(GravityCompat.START)
             }
-            if (Theme.isWhiteTheme()) {
-                toolbar.setBackgroundColor(Color.WHITE)
-                toolbar.setTitleTextColor(Color.parseColor("#212121"))
-                toolbar.navigationIcon?.let {
-                    val tinted = it.mutate()
-                    DrawableCompat.setTint(tinted, Color.parseColor("#212121"))
-                    toolbar.navigationIcon = tinted
-                }
-                toolbar.overflowIcon?.let {
-                    val tinted = it.mutate()
-                    DrawableCompat.setTint(tinted, Color.parseColor("#212121"))
-                    toolbar.overflowIcon = tinted
-                }
+            val primaryTextColor = requireContext().getColorAttr(android.R.attr.textColorPrimary)
+            toolbar.setTitleTextColor(primaryTextColor)
+            toolbar.navigationIcon?.let {
+                val tinted = it.mutate()
+                DrawableCompat.setTint(tinted, primaryTextColor)
+                toolbar.navigationIcon = tinted
+            }
+            toolbar.overflowIcon?.let {
+                val tinted = it.mutate()
+                DrawableCompat.setTint(tinted, primaryTextColor)
+                toolbar.overflowIcon = tinted
             }
         }
     }
