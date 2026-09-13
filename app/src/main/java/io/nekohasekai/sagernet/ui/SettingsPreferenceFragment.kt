@@ -54,6 +54,10 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat(), OnPreferenceDataS
 
         DataStore.configurationStore.registerChangeListener(this)
         listView.layoutManager = FixedLinearLayoutManager(listView)
+        setDivider(null)
+        setDividerHeight(0)
+        listView.clipToPadding = false
+        listView.setPadding(0, dp2px(8), 0, dp2px(88))
     }
 
     override fun onDestroyView() {

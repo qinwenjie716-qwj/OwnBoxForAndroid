@@ -445,6 +445,8 @@ class GroupSettingsActivity(
             super.onViewCreated(view, savedInstanceState)
 
             ViewCompat.setOnApplyWindowInsetsListener(listView, ListListener)
+            setDivider(null)
+            setDividerHeight(0)
         }
 
         override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

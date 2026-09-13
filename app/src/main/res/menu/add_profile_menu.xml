@@ -98,84 +98,90 @@
         android:title=""
         app:showAsAction="always">
         <menu>
-            <item
-                android:id="@+id/action_update_subscription"
-                android:title="@string/update_current_subscription" />
-            <item
-                android:id="@+id/action_clear_traffic_statistics"
-                android:title="@string/clear_traffic_statistics" />
-            <item
-                android:id="@+id/action_remove_duplicate"
-                android:title="@string/remove_duplicate" />
-            <item
-                android:id="@+id/action_connection_url_test"
-                android:title="@string/connection_test_url_test" />
-            <item
-                android:id="@+id/action_connection_tcp_ping"
-                android:title="@string/connection_test_tcp_ping" />
-            <item
-                android:id="@+id/action_speed_test_group"
-                android:title="@string/speed_test_group" />
-            <item
-                android:id="@+id/action_connection_test_clear_results"
-                android:title="@string/connection_test_clear_results" />
-            <item
-                android:id="@+id/action_connection_test_delete_unavailable"
-                android:title="@string/connection_test_delete_unavailable" />
-            <item
-                android:id="@+id/action_hide_unavailable"
-                android:title="@string/hide_unavailable_profiles"
-                android:checkable="true"
-                android:checked="false"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_global_mode"
-                android:title="@string/global_mode"
-                android:checkable="true"
-                android:checked="false"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_order_layout"
-                android:title="@string/sort_and_layout">
-                <menu>
-                    <item
-                        android:title="@string/group_order"
-                        android:enabled="false" />
-                    <group android:id="@+id/order_group" android:checkableBehavior="single">
+            <group android:id="@+id/group_actions_ops">
+                <item
+                    android:id="@+id/action_update_subscription"
+                    android:title="@string/update_current_subscription" />
+                <item
+                    android:id="@+id/action_clear_traffic_statistics"
+                    android:title="@string/clear_traffic_statistics" />
+                <item
+                    android:id="@+id/action_remove_duplicate"
+                    android:title="@string/remove_duplicate" />
+            </group>
+            <group android:id="@+id/group_actions_test">
+                <item
+                    android:id="@+id/action_connection_url_test"
+                    android:title="@string/connection_test_url_test" />
+                <item
+                    android:id="@+id/action_connection_tcp_ping"
+                    android:title="@string/connection_test_tcp_ping" />
+                <item
+                    android:id="@+id/action_speed_test_group"
+                    android:title="@string/speed_test_group" />
+                <item
+                    android:id="@+id/action_connection_test_clear_results"
+                    android:title="@string/connection_test_clear_results" />
+                <item
+                    android:id="@+id/action_connection_test_delete_unavailable"
+                    android:title="@string/connection_test_delete_unavailable" />
+            </group>
+            <group android:id="@+id/group_actions_settings">
+                <item
+                    android:id="@+id/action_hide_unavailable"
+                    android:title="@string/hide_unavailable_profiles"
+                    android:checkable="true"
+                    android:checked="false"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_global_mode"
+                    android:title="@string/global_mode"
+                    android:checkable="true"
+                    android:checked="false"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_order_layout"
+                    android:title="@string/sort_and_layout">
+                    <menu>
                         <item
-                            android:id="@+id/action_order_origin"
-                            android:title="@string/group_order_origin" />
+                            android:title="@string/group_order"
+                            android:enabled="false" />
+                        <group android:id="@+id/order_group" android:checkableBehavior="single">
+                            <item
+                                android:id="@+id/action_order_origin"
+                                android:title="@string/group_order_origin" />
+                            <item
+                                android:id="@+id/action_order_by_name"
+                                android:title="@string/group_order_by_name" />
+                            <item
+                                android:id="@+id/action_order_by_delay"
+                                android:title="@string/group_order_by_delay" />
+                        </group>
                         <item
-                            android:id="@+id/action_order_by_name"
-                            android:title="@string/group_order_by_name" />
+                            android:title="@string/layout"
+                            android:enabled="false" />
+                        <group android:id="@+id/layout_group" android:checkableBehavior="single">
+                            <item
+                                android:id="@+id/action_layout_single"
+                                android:title="@string/layout_single_column" />
+                            <item
+                                android:id="@+id/action_layout_double"
+                                android:title="@string/layout_double_column" />
+                        </group>
                         <item
-                            android:id="@+id/action_order_by_delay"
-                            android:title="@string/group_order_by_delay" />
-                    </group>
-                    <item
-                        android:title="@string/layout"
-                        android:enabled="false" />
-                    <group android:id="@+id/layout_group" android:checkableBehavior="single">
-                        <item
-                            android:id="@+id/action_layout_single"
-                            android:title="@string/layout_single_column" />
-                        <item
-                            android:id="@+id/action_layout_double"
-                            android:title="@string/layout_double_column" />
-                    </group>
-                    <item
-                        android:title="@string/card_style"
-                        android:enabled="false" />
-                    <group android:id="@+id/card_style_group" android:checkableBehavior="single">
-                        <item
-                            android:id="@+id/action_card_style_classic"
-                            android:title="@string/card_style_classic" />
-                        <item
-                            android:id="@+id/action_card_style_stroke"
-                            android:title="@string/card_style_stroke" />
-                    </group>
-                </menu>
-            </item>
+                            android:title="@string/card_style"
+                            android:enabled="false" />
+                        <group android:id="@+id/card_style_group" android:checkableBehavior="single">
+                            <item
+                                android:id="@+id/action_card_style_classic"
+                                android:title="@string/card_style_classic" />
+                            <item
+                                android:id="@+id/action_card_style_stroke"
+                                android:title="@string/card_style_stroke" />
+                        </group>
+                    </menu>
+                </item>
+            </group>
         </menu>
     </item>
 

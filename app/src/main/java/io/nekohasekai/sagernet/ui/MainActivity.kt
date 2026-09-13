@@ -19,6 +19,7 @@ import androidx.activity.addCallback
 import androidx.annotation.IdRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.preference.PreferenceDataStore
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
@@ -83,9 +84,12 @@ class MainActivity : ThemedActivity(),
 
         binding = LayoutMainBinding.inflate(layoutInflater)
         binding.fab.initProgress(binding.fabProgress)
+        val primaryColor = Theme.getPrimaryColor(this)
         if (Theme.isWhiteTheme()) {
             binding.fab.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#212121"))
             binding.fab.imageTintList = ColorStateList.valueOf(Color.WHITE)
+        } else {
+            binding.fab.backgroundTintList = ColorStateList.valueOf(primaryColor)
         }
         if (themeResId !in intArrayOf(
                 R.style.Theme_SagerNet_Black

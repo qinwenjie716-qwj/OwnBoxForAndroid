@@ -225,7 +225,7 @@
         android:layout_gravity="start"
         app:itemIconTint="@color/navigation_icon"
         app:itemShapeAppearance="@style/ShapeAppearance.SagerNet.NavItem"
-        app:itemShapeFillColor="@color/navigation_item"
+        app:itemShapeFillColor="@color/nav_item_fill"
         app:itemShapeInsetStart="8dp"
         app:itemShapeInsetEnd="8dp"
         app:itemShapeInsetTop="3dp"

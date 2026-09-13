@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingStart="12dp"
-                android:paddingEnd="8dp"
+                android:paddingEnd="12dp"
                 android:paddingBottom="4dp"
                 android:visibility="gone"
                 tools:visibility="visible">
@@ -156,16 +156,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:baselineAligned="true"
                 android:paddingStart="12dp"
-                android:paddingEnd="8dp"
+                android:paddingEnd="12dp"
                 android:paddingBottom="12dp">
 
                 <TextView
                     android:id="@+id/profile_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:textColorSecondary" />
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="VMESS" />
 
                 <View
                     android:layout_width="0dp"

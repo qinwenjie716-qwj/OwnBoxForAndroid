@@ -57,15 +57,12 @@ abstract class ThemedActivity : AppCompatActivity {
             val isLightPrimary = ColorUtils.calculateLuminance(primaryColor) > 0.45
             val isNight = Theme.usingNightMode()
 
-            if (isWhiteTheme) {
-                insetController.isAppearanceLightStatusBars = true
-                insetController.isAppearanceLightNavigationBars = true
-            } else if (isBlackTheme && isNight) {
+            if (isNight) {
                 insetController.isAppearanceLightStatusBars = false
                 insetController.isAppearanceLightNavigationBars = false
             } else {
-                insetController.isAppearanceLightStatusBars = isLightPrimary && !isNight
-                insetController.isAppearanceLightNavigationBars = false
+                insetController.isAppearanceLightStatusBars = true
+                insetController.isAppearanceLightNavigationBars = true
             }
         }
 

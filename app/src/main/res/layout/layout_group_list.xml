@@ -16,16 +16,19 @@
         android:id="@+id/group_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorPrimary"
+        android:background="?android:attr/colorBackground"
         android:elevation="0dp"
         android:visibility="gone"
-        app:tabIndicatorColor="?tabIndicatorColor"
+        app:tabIndicatorColor="?attr/colorPrimary"
+        app:tabIndicatorHeight="3dp"
         app:tabIndicatorFullWidth="false"
         app:tabMode="scrollable"
         app:tabPaddingStart="16dp"
+        app:tabPaddingEnd="16dp"
         app:tabRippleColor="?tabRippleColor"
-        app:tabSelectedTextColor="?tabSelectedTextColor"
-        app:tabTextColor="?tabTextColor"
+        app:tabSelectedTextColor="?attr/colorPrimary"
+        app:tabTextColor="?android:attr/textColorSecondary"
+        app:tabTextAppearance="@style/Widget.SagerNet.TabLayout.TextAppearance"
         app:tabUnboundedRipple="false" />
 
     <androidx.viewpager2.widget.ViewPager2

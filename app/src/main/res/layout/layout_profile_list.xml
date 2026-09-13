@@ -131,7 +131,7 @@
         android:paddingLeft="4dp"
         android:paddingTop="4dp"
         android:paddingRight="4dp"
-        android:paddingBottom="80dp"
+        android:paddingBottom="@dimen/main_list_padding_bottom"
         android:scrollbarSize="0dp"
         app:fastScrollAutoHide="true"
         app:fastScrollThumbColor="?colorPrimary"

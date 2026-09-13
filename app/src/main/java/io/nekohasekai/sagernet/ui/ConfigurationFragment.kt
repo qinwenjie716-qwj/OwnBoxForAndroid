@@ -2926,6 +2926,13 @@ class ConfigurationFragment @JvmOverloads constructor(
 
                 tvName.text = proxyEntity.displayName()
                 tvType.text = proxyEntity.displayType()
+                val dialogProtoColor = context.getProtocolColor(proxyEntity.type)
+                val dialogChipBg = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = dp2px(6).toFloat()
+                    setColor(ColorUtils.setAlphaComponent(dialogProtoColor, (255 * 0.12).toInt()))
+                }
+                tvType.background = dialogChipBg
+                tvType.setTextColor(dialogProtoColor)
 
                 val pf = parentFragment as? ConfigurationFragment
                 val isSelected = pf?.isSelectedProfile(proxyEntity.id) == true
@@ -3191,7 +3198,13 @@ class ConfigurationFragment @JvmOverloads constructor(
 
                 profileName.text = bean.displayName()
                 profileType.text = proxyEntity.displayType()
-                profileType.setTextColor(requireContext().getProtocolColor(proxyEntity.type))
+                val protocolColor = requireContext().getProtocolColor(proxyEntity.type)
+                val chipBg = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = dp2px(6).toFloat()
+                    setColor(ColorUtils.setAlphaComponent(protocolColor, (255 * 0.12).toInt()))
+                }
+                profileType.background = chipBg
+                profileType.setTextColor(protocolColor)
 
                 val rx = proxyEntity.rx
                 val tx = proxyEntity.tx

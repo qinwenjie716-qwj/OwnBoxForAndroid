@@ -19,8 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_navigation_close"
+            app:navigationIconTint="?android:attr/textColorPrimary"
             app:title="@string/menu_dashboard"
-            app:titleTextColor="?attr/primaryOrTextPrimary" />
+            app:titleTextColor="?android:attr/textColorPrimary" />
 
         <!-- Status & Stats Summary Card -->
         <com.google.android.material.card.MaterialCardView

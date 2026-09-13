@@ -12,10 +12,17 @@
         <item name="colorMaterial100">@color/material_pink_100</item>
         <item name="colorMaterial300">@color/material_pink_300</item>
 
-        <item name="colorSurface">?android:attr/colorBackground</item>
+        <item name="android:colorBackground">@color/md3_background</item>
+        <item name="colorSurface">@color/md3_surface</item>
+        <item name="android:textColorPrimary">@color/md3_text_primary</item>
+        <item name="android:textColorSecondary">@color/md3_text_secondary</item>
         <item name="colorOnSurface">?android:attr/textColorPrimary</item>
         <item name="colorOnSurfaceVariant">?android:attr/textColorSecondary</item>
-        <item name="colorSurfaceVariant">?android:attr/colorBackground</item>
+        <item name="colorSurfaceVariant">@color/md3_background</item>
+
+        <!-- Switch, RadioButton, CheckBox 激活色严格收敛至自定义主题主色 -->
+        <item name="colorControlActivated">?colorPrimary</item>
+
         <item name="textAppearanceHeadlineLarge">?attr/textAppearanceHeadline4</item>
         <item name="textAppearanceHeadlineMedium">?attr/textAppearanceHeadline5</item>
         <item name="textAppearanceHeadlineSmall">?attr/textAppearanceHeadline6</item>
@@ -39,12 +46,18 @@
 
         <item name="fabColorBackground">?colorPrimary</item>
         <item name="selectedColorPrimary">?colorPrimary</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="tabTextColor">#99FFFFFF</item>
-        <item name="tabSelectedTextColor">@color/white</item>
-        <item name="tabIndicatorColor">@color/white</item>
-        <item name="tabRippleColor">@color/white</item>
-        <item name="whiteOrTextPrimary">@color/white</item>
+
+        <!-- 沉浸式 Top App Bar 主题与样式 -->
+        <item name="actionBarTheme">@style/ThemeOverlay.SagerNet.Toolbar</item>
+        <item name="appBarLayoutStyle">@style/Widget.SagerNet.AppBarLayout</item>
+        <item name="toolbarStyle">@style/Widget.SagerNet.Toolbar</item>
+
+        <!-- MD3 Tab 默认样式（高对比、沉浸底色、首字母大写） -->
+        <item name="tabTextColor">?android:attr/textColorSecondary</item>
+        <item name="tabSelectedTextColor">?colorPrimary</item>
+        <item name="tabIndicatorColor">?colorPrimary</item>
+        <item name="tabRippleColor">?colorPrimary</item>
+        <item name="whiteOrTextPrimary">?android:attr/textColorPrimary</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <item name="windowActionModeOverlay">true</item>
@@ -88,10 +101,14 @@
         <item name="colorMaterial100">@color/material_pink_100</item>
         <item name="colorMaterial300">@color/material_pink_300</item>
 
-        <item name="colorSurface">?android:attr/colorBackground</item>
+        <item name="android:colorBackground">@color/md3_background</item>
+        <item name="colorSurface">@color/md3_surface</item>
+        <item name="android:textColorPrimary">@color/md3_text_primary</item>
+        <item name="android:textColorSecondary">@color/md3_text_secondary</item>
         <item name="colorOnSurface">?android:attr/textColorPrimary</item>
         <item name="colorOnSurfaceVariant">?android:attr/textColorSecondary</item>
-        <item name="colorSurfaceVariant">?android:attr/colorBackground</item>
+        <item name="colorSurfaceVariant">@color/md3_background</item>
+        <item name="colorControlActivated">?colorPrimary</item>
         <item name="textAppearanceHeadlineLarge">?attr/textAppearanceHeadline4</item>
         <item name="textAppearanceHeadlineMedium">?attr/textAppearanceHeadline5</item>
         <item name="textAppearanceHeadlineSmall">?attr/textAppearanceHeadline6</item>
@@ -192,10 +209,37 @@
 
     <style name="Widget.SagerNet.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="cardCornerRadius">@dimen/profile_card_corner_radius</item>
         <item name="strokeColor">@color/card_stroke</item>
         <item name="strokeWidth">@dimen/card_stroke_width</item>
-        <item name="cardBackgroundColor">?android:attr/colorBackground</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+    </style>
+
+    <!-- MD3 Immersive AppBar & Toolbar styles -->
+    <style name="Widget.SagerNet.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Surface">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Widget.SagerNet.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="titleTextColor">?android:attr/textColorPrimary</item>
+        <item name="subtitleTextColor">?android:attr/textColorSecondary</item>
+        <item name="navigationIconTint">?android:attr/textColorPrimary</item>
+        <item name="actionMenuTextColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="ThemeOverlay.SagerNet.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
+        <item name="android:textColorPrimary">?android:attr/textColorPrimary</item>
+        <item name="android:textColorSecondary">?android:attr/textColorSecondary</item>
+        <item name="actionMenuTextColor">?android:attr/textColorPrimary</item>
+        <item name="colorControlNormal">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="Widget.SagerNet.TabLayout.TextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textAllCaps">false</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <!-- ElevatedCard: shadow + tonal surface, no stroke. -->

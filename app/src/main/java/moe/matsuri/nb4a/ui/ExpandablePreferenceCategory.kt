@@ -143,12 +143,16 @@ class ExpandablePreferenceCategory @JvmOverloads constructor(
             }
         }
 
+        val textPrimary = context.getColorAttr(android.R.attr.textColorPrimary)
+        val textSecondary = context.getColorAttr(android.R.attr.textColorSecondary)
+
         val titleView = holder.findViewById(android.R.id.title) as? TextView
-        titleView?.setTextColor(primaryColor)
+        titleView?.setTextColor(if (isExpanded) primaryColor else textPrimary)
 
         val arrow = holder.findViewById(R.id.category_arrow) as? ImageView
         if (arrow != null) {
-            arrow.imageTintList = ColorStateList.valueOf(primaryColor)
+            val arrowColor = if (isExpanded) primaryColor else textSecondary
+            arrow.imageTintList = ColorStateList.valueOf(arrowColor)
             arrow.setImageResource(
                 if (isExpanded) R.drawable.ic_baseline_keyboard_arrow_up_24
                 else R.drawable.ic_baseline_keyboard_arrow_down_24

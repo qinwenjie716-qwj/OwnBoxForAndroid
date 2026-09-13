@@ -2,6 +2,13 @@
 <resources>
     <color name="fab_color_progress">@color/material_light_white</color>
     <color name="preference_simple_menu_background">#303030</color>
+    <!-- Material Design 3 全局色彩与层级系统 (夜间模式) -->
+    <color name="md3_background">#121212</color>
+    <color name="md3_surface">#1E1E1E</color>
+    <color name="md3_text_primary">#E6E1E5</color>
+    <color name="md3_text_secondary">#CAC4D0</color>
+    <color name="md3_top_app_bar">#1E1E1E</color>
+
     <!-- 卡片默认细边框：约 12% 白 -->
     <color name="card_stroke">#29FFFFFF</color>
 

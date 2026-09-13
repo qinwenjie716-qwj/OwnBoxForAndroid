@@ -346,6 +346,8 @@ class RouteSettingsActivity(
             super.onViewCreated(view, savedInstanceState)
 
             ViewCompat.setOnApplyWindowInsetsListener(listView, ListListener)
+            setDivider(null)
+            setDividerHeight(0)
 
             activity?.apply {
                 viewCreated(view, savedInstanceState)
