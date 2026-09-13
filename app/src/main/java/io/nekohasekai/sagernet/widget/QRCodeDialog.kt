@@ -38,6 +38,7 @@ class QRCodeDialog() : DialogFragment() {
         private const val KEY_NAME = "io.nekohasekai.sagernet.QRCodeDialog.KEY_NAME"
         private const val KEY_TYPE = "io.nekohasekai.sagernet.QRCodeDialog.KEY_TYPE"
         private const val KEY_TYPE_INT = "io.nekohasekai.sagernet.QRCodeDialog.KEY_TYPE_INT"
+        private const val KEY_INITIAL_IS_SN = "io.nekohasekai.sagernet.QRCodeDialog.KEY_INITIAL_IS_SN"
         private val iso88591 = StandardCharsets.ISO_8859_1.newEncoder()
     }
 
@@ -53,14 +54,16 @@ class QRCodeDialog() : DialogFragment() {
         universalLink: String?,
         displayName: String,
         displayType: String? = null,
-        typeInt: Int = -1
+        typeInt: Int = -1,
+        initialIsSn: Boolean = false
     ) : this() {
         arguments = bundleOf(
             KEY_STD_URL to stdLink,
             KEY_UNIVERSAL_URL to universalLink,
             KEY_NAME to displayName,
             KEY_TYPE to displayType,
-            KEY_TYPE_INT to typeInt
+            KEY_TYPE_INT to typeInt,
+            KEY_INITIAL_IS_SN to initialIsSn
         )
     }
 
@@ -153,8 +156,12 @@ class QRCodeDialog() : DialogFragment() {
         })
 
         // Initial draw
-        val isInitialSn = !hasStd && hasUniversal
-        updateCode(if (hasStd) stdUrl!! else (universalUrl ?: currentUrl), isSn = isInitialSn)
+        val preferSn = args.getBoolean(KEY_INITIAL_IS_SN, false)
+        val isInitialSn = (preferSn && hasUniversal) || (!hasStd && hasUniversal)
+        if (isInitialSn && hasStd && hasUniversal) {
+            tabs.getTabAt(1)?.select()
+        }
+        updateCode(if (isInitialSn) (universalUrl ?: currentUrl) else (if (hasStd) stdUrl!! else (universalUrl ?: currentUrl)), isSn = isInitialSn)
 
         btnCopy.setOnClickListener {
             if (currentUrl.isNotEmpty()) {

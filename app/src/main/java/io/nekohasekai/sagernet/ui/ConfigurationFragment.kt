@@ -2306,7 +2306,17 @@ class ConfigurationFragment @JvmOverloads constructor(
             }
         }
 
+        private var activeNodePopupMenu: PopupMenu? = null
+
+        override fun onDestroyView() {
+            activeNodePopupMenu?.dismiss()
+            activeNodePopupMenu = null
+            super.onDestroyView()
+        }
+
         override fun onDestroy() {
+            activeNodePopupMenu?.dismiss()
+            activeNodePopupMenu = null
             adapter?.let {
                 ProfileManager.removeListener(it)
                 GroupManager.removeListener(it)
@@ -2317,6 +2327,7 @@ class ConfigurationFragment @JvmOverloads constructor(
             if (!::undoManager.isInitialized) return
             undoManager.flush()
         }
+
 
         inner class ConfigurationAdapter : RecyclerView.Adapter<ConfigurationHolder>(),
             ProfileManager.Listener,
@@ -2827,29 +2838,34 @@ class ConfigurationFragment @JvmOverloads constructor(
             var lastSelfHasMiddleRow: Boolean? = null
             var lastBoundTx = Long.MIN_VALUE
             var lastBoundRx = Long.MIN_VALUE
-            private fun showShareMenu(anchor: View, proxyEntity: ProxyEntity) {
+            private fun showNodeCascadingMenu(anchor: View, proxyEntity: ProxyEntity) {
+                if (select) return
+                activeNodePopupMenu?.dismiss()
                 val popup = PopupMenu(requireContext(), anchor)
+                activeNodePopupMenu = popup
                 popup.menuInflater.inflate(R.menu.profile_share_menu, popup.menu)
 
-                when {
-                    !proxyEntity.haveStandardLink() -> {
-                        popup.menu.findItem(R.id.action_group_qr).subMenu?.removeItem(R.id.action_standard_qr)
-                        popup.menu.findItem(R.id.action_group_clipboard).subMenu?.removeItem(
-                            R.id.action_standard_clipboard
-                        )
-                    }
+                val hasStd = proxyEntity.haveStandardLink()
+                val hasLink = proxyEntity.haveLink()
 
-                    !proxyEntity.haveLink() -> {
-                        popup.menu.removeItem(R.id.action_group_qr)
-                        popup.menu.removeItem(R.id.action_group_clipboard)
-                    }
+                if (!hasStd) {
+                    popup.menu.findItem(R.id.action_group_qr)?.subMenu?.removeItem(R.id.action_standard_qr)
+                    popup.menu.findItem(R.id.action_group_clipboard)?.subMenu?.removeItem(
+                        R.id.action_standard_clipboard
+                    )
                 }
 
-                if (proxyEntity.nekoBean != null) {
-                    popup.menu.removeItem(R.id.action_group_configuration)
+                if (!hasLink) {
+                    popup.menu.removeItem(R.id.action_group_qr)
+                    popup.menu.removeItem(R.id.action_group_clipboard)
                 }
 
                 popup.setOnMenuItemClickListener(this)
+                popup.setOnDismissListener {
+                    if (activeNodePopupMenu === popup) {
+                        activeNodePopupMenu = null
+                    }
+                }
                 popup.show()
             }
 
@@ -2885,161 +2901,25 @@ class ConfigurationFragment @JvmOverloads constructor(
                 }
                 profileStatus.isFocusable = false
                 editButton.setOnClickListener {
-                    val proxyEntity = entity
-                    val pf = parentFragment as? ConfigurationFragment
-                    val isSelected = pf?.isSelectedProfile(proxyEntity.id) == true
-                    val isConnected = DataStore.serviceState.started && (proxyEntity.id == DataStore.currentProfile || (isSelected && pf?.isCurrentProfile(proxyEntity.id) == true))
-                    if (isConnected) {
-                        android.widget.Toast.makeText(it.context, R.string.cannot_edit_active_profile, android.widget.Toast.LENGTH_SHORT).show()
-                    } else {
-                        it.context.startActivity(
-                            proxyEntity.settingIntent(
-                                it.context, proxyGroup.type == GroupType.SUBSCRIPTION
-                            )
-                        )
-                    }
+                    showNodeCascadingMenu(it, entity)
                 }
                 removeButton.setOnClickListener {
                     removeProfile(entity)
                 }
                 doubleColumnMenuButton.setOnClickListener {
-                    showNodeActionDialog(entity)
+                    showNodeCascadingMenu(it, entity)
                 }
                 shareLayout.setOnClickListener {
                     val proxyEntity = entity
                     if (!select && proxyEntity.type != ProxyEntity.TYPE_CHAIN && proxyEntity.type != ProxyEntity.TYPE_BALANCER) {
-                        showShareMenu(it, proxyEntity)
+                        showNodeCascadingMenu(it, proxyEntity)
                     }
                 }
                 view.isLongClickable = false
                 view.setOnLongClickListener(null)
             }
 
-            private fun showNodeActionDialog(proxyEntity: ProxyEntity) {
-                if (select) return
-                val context = requireContext()
-                val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_profile_actions, null)
-                val dialog = MaterialAlertDialogBuilder(context)
-                    .setView(dialogView)
-                    .create()
 
-                val tvName = dialogView.findViewById<TextView>(R.id.dialog_profile_name)
-                val tvType = dialogView.findViewById<TextView>(R.id.dialog_profile_type)
-                val btnSpeedTest = dialogView.findViewById<View>(R.id.action_speed_test_node)
-                val btnEdit = dialogView.findViewById<View>(R.id.action_edit_node)
-                val btnQr = dialogView.findViewById<View>(R.id.action_qr_code_node)
-                val btnExportStd = dialogView.findViewById<View>(R.id.action_export_clipboard_std)
-                val btnExportSn = dialogView.findViewById<View>(R.id.action_export_clipboard_sn)
-                val btnExportFile = dialogView.findViewById<View>(R.id.action_export_file_node)
-                val btnDelete = dialogView.findViewById<View>(R.id.action_delete_node)
-
-                tvName.text = proxyEntity.displayName()
-                tvType.text = proxyEntity.displayType()
-                val dialogProtoColor = context.getProtocolColor(proxyEntity.type)
-                val dialogChipBg = android.graphics.drawable.GradientDrawable().apply {
-                    cornerRadius = dp2px(6).toFloat()
-                    setColor(ColorUtils.setAlphaComponent(dialogProtoColor, (255 * 0.12).toInt()))
-                }
-                tvType.background = dialogChipBg
-                tvType.setTextColor(dialogProtoColor)
-
-                val pf = parentFragment as? ConfigurationFragment
-                val isSelected = pf?.isSelectedProfile(proxyEntity.id) == true
-                val isConnected = DataStore.serviceState.started && (proxyEntity.id == DataStore.currentProfile || (isSelected && pf?.isCurrentProfile(proxyEntity.id) == true))
-
-                btnSpeedTest.setOnClickListener {
-                    dialog.dismiss()
-                    pf?.speedTestSingle(proxyEntity)
-                }
-
-                if (isConnected) {
-                    btnEdit.alpha = 0.4f
-                    btnEdit.setOnClickListener {
-                        android.widget.Toast.makeText(context, R.string.cannot_edit_active_profile, android.widget.Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    btnEdit.alpha = 1.0f
-                    btnEdit.setOnClickListener {
-                        dialog.dismiss()
-                        context.startActivity(
-                            proxyEntity.settingIntent(
-                                context, proxyGroup.type == GroupType.SUBSCRIPTION
-                            )
-                        )
-                    }
-                }
-
-                val hasLink = proxyEntity.haveLink()
-                val hasStd = proxyEntity.haveStandardLink()
-
-                if (!hasLink) {
-                    btnQr.isGone = true
-                    btnExportStd.isGone = true
-                    btnExportSn.isGone = true
-                } else {
-                    btnExportStd.isGone = !hasStd
-
-                    btnQr.setOnClickListener {
-                        dialog.dismiss()
-                        try {
-                            val stdLink = if (hasStd) proxyEntity.toStdLink() else null
-                            val universalLink = proxyEntity.requireBean().toUniversalLink()
-                            val name = proxyEntity.displayName() ?: ""
-                            val typeName = proxyEntity.displayType()
-                            QRCodeDialog(
-                                stdLink = stdLink,
-                                universalLink = universalLink,
-                                displayName = name,
-                                displayType = typeName,
-                                typeInt = proxyEntity.type
-                            ).showAllowingStateLoss(parentFragmentManager)
-                        } catch (e: Exception) {
-                            Logs.w(e)
-                            safeSnackbar(e.readableMessage)
-                        }
-                    }
-
-                    btnExportStd.setOnClickListener {
-                        dialog.dismiss()
-                        try {
-                            export(proxyEntity.toStdLink())
-                        } catch (e: Exception) {
-                            Logs.w(e)
-                            safeSnackbar(e.readableMessage)
-                        }
-                    }
-
-                    btnExportSn.setOnClickListener {
-                        dialog.dismiss()
-                        try {
-                            export(proxyEntity.requireBean().toUniversalLink())
-                        } catch (e: Exception) {
-                            Logs.w(e)
-                            safeSnackbar(e.readableMessage)
-                        }
-                    }
-                }
-
-                btnExportFile.setOnClickListener {
-                    dialog.dismiss()
-                    try {
-                        val cfg = proxyEntity.exportConfig()
-                        DataStore.serverConfig = cfg.first
-                        val targetLauncher = (parentFragment as ConfigurationFragment).exportConfig
-                        startFilesForResult(targetLauncher, cfg.second)
-                    } catch (e: Exception) {
-                        Logs.w(e)
-                        safeSnackbar(e.readableMessage)
-                    }
-                }
-
-                btnDelete.setOnClickListener {
-                    dialog.dismiss()
-                    removeProfile(proxyEntity)
-                }
-
-                dialog.show()
-            }
 
             private fun selectProfile(proxyEntity: ProxyEntity) {
                 val pf = parentFragment as? ConfigurationFragment ?: return
@@ -3114,7 +2994,7 @@ class ConfigurationFragment @JvmOverloads constructor(
                             true
                         }
                         R.id.action_share -> {
-                            showShareMenu(anchor, proxyEntity)
+                            showNodeCascadingMenu(anchor, proxyEntity)
                             true
                         }
                         R.id.action_delete -> {
@@ -3353,11 +3233,38 @@ class ConfigurationFragment @JvmOverloads constructor(
 
             override fun onMenuItemClick(item: MenuItem): Boolean {
                 try {
-                    currentName = entity.displayName()!!
+                    currentName = entity.displayName() ?: ""
                     when (item.itemId) {
-                        R.id.action_standard_qr -> showCode(entity.toStdLink())
+                        R.id.action_test_profile_speed -> {
+                            (parentFragment as? ConfigurationFragment)?.speedTestSingle(entity)
+                        }
+                        R.id.action_standard_qr -> {
+                            val hasStd = entity.haveStandardLink()
+                            val stdLink = if (hasStd) entity.toStdLink() else null
+                            val universalLink = if (entity.haveLink()) entity.requireBean().toUniversalLink() else null
+                            QRCodeDialog(
+                                stdLink = stdLink,
+                                universalLink = universalLink,
+                                displayName = currentName,
+                                displayType = entity.displayType(),
+                                typeInt = entity.type,
+                                initialIsSn = false
+                            ).showAllowingStateLoss(parentFragmentManager)
+                        }
+                        R.id.action_universal_qr -> {
+                            val hasStd = entity.haveStandardLink()
+                            val stdLink = if (hasStd) entity.toStdLink() else null
+                            val universalLink = if (entity.haveLink()) entity.requireBean().toUniversalLink() else null
+                            QRCodeDialog(
+                                stdLink = stdLink,
+                                universalLink = universalLink,
+                                displayName = currentName,
+                                displayType = entity.displayType(),
+                                typeInt = entity.type,
+                                initialIsSn = true
+                            ).showAllowingStateLoss(parentFragmentManager)
+                        }
                         R.id.action_standard_clipboard -> export(entity.toStdLink())
-                        R.id.action_universal_qr -> showCode(entity.requireBean().toUniversalLink())
                         R.id.action_universal_clipboard -> export(
                             entity.requireBean().toUniversalLink()
                         )
@@ -3369,9 +3276,6 @@ class ConfigurationFragment @JvmOverloads constructor(
                             startFilesForResult(
                                 (parentFragment as ConfigurationFragment).exportConfig, cfg.second
                             )
-                        }
-                        R.id.action_test_profile_speed -> {
-                            (parentFragment as? ConfigurationFragment)?.speedTestSingle(entity)
                         }
                     }
                 } catch (e: Exception) {

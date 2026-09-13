@@ -777,6 +777,10 @@
     <string name="custom_icon_requirement_tip">Icon pack must be a ZIP archive containing 512x512 icon.png and tile.png.</string>
     <string name="more">More</string>
     <string name="action_test_profile_speed">Test Node Speed</string>
+    <string name="action_qr_code">QR Code</string>
+    <string name="action_export_clipboard_menu">Export to Clipboard</string>
+    <string name="format_snlink_upper">SNLINK</string>
+    <string name="format_snlink_lower">snlink</string>
     <string name="testing_node_speed">Testing node speed...</string>
     <string name="concurrent_dial">Concurrent Dial (Happy Eyeballs)</string>
     <string name="concurrent_dial_summary">Enable concurrent connection establishment for faster networking</string>

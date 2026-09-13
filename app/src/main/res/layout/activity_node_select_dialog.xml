@@ -60,7 +60,8 @@
             app:tabMode="scrollable"
             app:tabRippleColor="#20FFFFFF"
             app:tabSelectedTextColor="#FFFFFF"
-            app:tabTextColor="#94A3B8" />
+            app:tabTextColor="#94A3B8"
+            app:tabTextAppearance="@style/Widget.SagerNet.TabLayout.TextAppearance" />
 
         <View
             android:layout_width="match_parent"

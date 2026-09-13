@@ -1,3 +1,18 @@
+# Own for Android v2.6.17 预览版 (v2.6.17-preview)
+
+* **节点操作轻量化与多级级联菜单交互重构 (Cascading Menu)**：
+  * 单节点操作统一收纳至卡片上的“三个点”按钮及编辑入口，第一级菜单严格精简规范为 4 项：测试当前节点速度、二维码、导出剪贴板、配置；
+  * 原生平滑多级级联：
+    * **“二维码”子菜单**：展开“标准”与“SNLINK”，点击即打开对应格式二维码预览并支持即时切换；
+    * **“导出剪贴板”子菜单**：展开“标准”与“snlink”，一键复制对应格式的节点代理链接；
+    * **“配置”子菜单**：展开“导出到剪切板”与“导出到文件”，方便将节点核心配置导出为 JSON 文件或快速黏贴；
+* **菜单生命周期安全加固 (Anti-Leak)**：
+  * 菜单展示与收起严格绑定 Fragment/Activity 生命周期（`onDestroyView`/`onDestroy` 自动回收 dismiss），彻底杜绝页面旋转或退出时的 `WindowLeaked` 崩溃异常；
+* **应用启动致命闪退 (Fatal Crash) 深度修复**：
+  * 排查并彻底消除 `ThemeOverlay.SagerNet.Toolbar` 中的自引用循环属性解析缺陷（`colorSurface` / `android:colorBackground` 导致 `UnsupportedOperationException: Failed to resolve attribute at index 13`）；
+  * 全局启动主题 `Theme.Start` 统一继承 `Theme.SagerNet`，确保在 Android 16 / SDK 36 等各系统冷启动阶段完整继承 Material Design 3 规范与 `TextAppearance` 属性映射链条；
+  * 全局声明 `Widget.SagerNet.TabLayout` 样式，消除各子界面 `TabLayout` 因未声明 `tabTextAppearance` 引发的 `IllegalArgumentException` 异常。
+
 # Own for Android v2.6.16 紧急修复版 (v2.6.16-hotfix)
 
 * **彻底修复顶部导航栏（Top App Bar）异常变黑与前景色反转**：清理 API 26+ 设备误加载的旧版残留样式，修复 Toolbar 主题属性映射；顶部全面应用 Surface 纯白/深色纯净底色与无边沉浸设计，标题及汉堡菜单、搜索、添加等功能图标在浅色模式下完美呈现高对比深色（`#1C1B1F`），并在暗色模式下自适应切换浅色（`#E6E1E5`）；

@@ -681,7 +681,11 @@
     <string name="custom_icon_error_security">安全校验失败：%s</string>
     <string name="custom_icon_requirement_tip">图标包须为 ZIP 压缩包，内含 512x512 的 icon.png 与 tile.png。</string>
     <string name="more">更多</string>
-    <string name="action_test_profile_speed">测当前节点速度</string>
+    <string name="action_test_profile_speed">测试当前节点速度</string>
+    <string name="action_qr_code">二维码</string>
+    <string name="action_export_clipboard_menu">导出剪贴板</string>
+    <string name="format_snlink_upper">SNLINK</string>
+    <string name="format_snlink_lower">snlink</string>
     <string name="testing_node_speed">正在测试节点速度...</string>
     <string name="concurrent_dial">并发拨号 (Happy Eyeballs)</string>
     <string name="concurrent_dial_summary">启用并发连接以更快地建立网络（可能会增加电池使用量）</string>

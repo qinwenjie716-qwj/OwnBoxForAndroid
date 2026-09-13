@@ -5,31 +5,30 @@
         android:title="@string/action_test_profile_speed" />
     <item
         android:id="@+id/action_group_qr"
-        android:title="@string/share_qr_nfc">
+        android:title="@string/action_qr_code">
         <menu>
             <item
                 android:id="@+id/action_standard_qr"
                 android:title="@string/standard" />
             <item
                 android:id="@+id/action_universal_qr"
-                android:title="SN Link" />
+                android:title="@string/format_snlink_upper" />
         </menu>
     </item>
     <item
         android:id="@+id/action_group_clipboard"
-        android:title="@string/action_export_clipboard">
+        android:title="@string/action_export_clipboard_menu">
         <menu>
             <item
                 android:id="@+id/action_standard_clipboard"
                 android:title="@string/standard" />
             <item
                 android:id="@+id/action_universal_clipboard"
-                android:title="SN Link" />
+                android:title="@string/format_snlink_lower" />
         </menu>
     </item>
     <item
         android:id="@+id/action_group_configuration"
-
         android:title="@string/menu_configuration">
         <menu>
             <item
@@ -40,4 +39,4 @@
                 android:title="@string/action_export_file" />
         </menu>
     </item>
-</menu>
+</menu>
