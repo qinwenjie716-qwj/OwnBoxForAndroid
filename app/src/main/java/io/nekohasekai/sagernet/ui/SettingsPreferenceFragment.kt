@@ -18,6 +18,7 @@ import io.nekohasekai.sagernet.SagerNet
 import io.nekohasekai.sagernet.SpeedTestSettings
 import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.database.preference.EditTextPreferenceModifiers
+import io.nekohasekai.sagernet.database.preference.OnPreferenceDataStoreChangeListener
 import io.nekohasekai.sagernet.ktx.*
 import io.nekohasekai.sagernet.utils.AppLocale
 import io.nekohasekai.sagernet.utils.Theme
@@ -27,7 +28,7 @@ import android.os.Looper
 import android.widget.Toast
 import java.io.File
 
-class SettingsPreferenceFragment : PreferenceFragmentCompat() {
+class SettingsPreferenceFragment : PreferenceFragmentCompat(), OnPreferenceDataStoreChangeListener {
 
     private lateinit var isProxyApps: SwitchPreference
 
@@ -51,7 +52,21 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        DataStore.configurationStore.registerChangeListener(this)
         listView.layoutManager = FixedLinearLayoutManager(listView)
+    }
+
+    override fun onDestroyView() {
+        DataStore.configurationStore.unregisterChangeListener(this)
+        super.onDestroyView()
+    }
+
+    override fun onPreferenceDataStoreChanged(store: PreferenceDataStore, key: String) {
+        if (key == Key.PROFILE_CARD_STYLE) {
+            runOnMainDispatcher {
+                listView?.adapter?.notifyDataSetChanged()
+            }
+        }
     }
 
     private val reloadListener = Preference.OnPreferenceChangeListener { _, _ ->

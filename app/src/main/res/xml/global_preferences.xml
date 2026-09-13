@@ -7,6 +7,15 @@
         app:key="categoryUI"
         app:title="@string/ui_settings">
 
+        <moe.matsuri.nb4a.ui.SimpleMenuPreference
+            app:defaultValue="0"
+            app:entries="@array/card_style_entries"
+            app:entryValues="@array/card_style_values"
+            app:icon="@drawable/ic_baseline_view_list_24"
+            app:key="profileCardStyle"
+            app:title="@string/card_style"
+            app:useSimpleSummaryProvider="true" />
+
         <SwitchPreference
             app:defaultValue="true"
             app:icon="@drawable/ic_baseline_speed_24"

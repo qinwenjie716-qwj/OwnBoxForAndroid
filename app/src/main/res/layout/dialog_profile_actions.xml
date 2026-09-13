@@ -53,7 +53,37 @@
         android:alpha="0.12"
         android:background="?android:attr/dividerHorizontal" />
 
-    <!-- Action 1: Edit Profile -->
+    <!-- Action 1: Test Speed -->
+    <LinearLayout
+        android:id="@+id/action_speed_test_node"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/action_test_profile_speed"
+            android:src="@drawable/ic_baseline_speed_24"
+            app:tint="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="@string/action_test_profile_speed"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Action 2: Edit Profile -->
     <LinearLayout
         android:id="@+id/action_edit_node"
         android:layout_width="match_parent"
@@ -83,9 +113,9 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <!-- Action 2: More actions (Share / QR / Export) -->
+    <!-- Action 3: QR Code -->
     <LinearLayout
-        android:id="@+id/action_more_node"
+        android:id="@+id/action_qr_code_node"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="?attr/selectableItemBackground"
@@ -99,8 +129,8 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:contentDescription="@string/more"
-            android:src="@drawable/ic_baseline_more_vert_24"
+            android:contentDescription="@string/share_qr_nfc"
+            android:src="@drawable/ic_action_qrcode"
             app:tint="?android:attr/textColorPrimary" />
 
         <TextView
@@ -108,12 +138,50 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:text="@string/more"
+            android:text="@string/share_qr_nfc"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp" />
     </LinearLayout>
 
-    <!-- Action 3: Delete node (High risk / Red) -->
+    <!-- Action 4: Export to Clipboard -->
+    <LinearLayout
+        android:id="@+id/action_export_clipboard_node"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/action_export_clipboard"
+            android:src="@drawable/ic_content_copy"
+            app:tint="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="@string/action_export_clipboard"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:alpha="0.12"
+        android:background="?android:attr/dividerHorizontal" />
+
+    <!-- Action 5: Delete node (High risk / Red) -->
     <LinearLayout
         android:id="@+id/action_delete_node"
         android:layout_width="match_parent"

@@ -2918,8 +2918,10 @@ class ConfigurationFragment @JvmOverloads constructor(
 
                 val tvName = dialogView.findViewById<TextView>(R.id.dialog_profile_name)
                 val tvType = dialogView.findViewById<TextView>(R.id.dialog_profile_type)
+                val btnSpeedTest = dialogView.findViewById<View>(R.id.action_speed_test_node)
                 val btnEdit = dialogView.findViewById<View>(R.id.action_edit_node)
-                val btnMore = dialogView.findViewById<View>(R.id.action_more_node)
+                val btnQr = dialogView.findViewById<View>(R.id.action_qr_code_node)
+                val btnExportClipboard = dialogView.findViewById<View>(R.id.action_export_clipboard_node)
                 val btnDelete = dialogView.findViewById<View>(R.id.action_delete_node)
 
                 tvName.text = proxyEntity.displayName()
@@ -2928,6 +2930,11 @@ class ConfigurationFragment @JvmOverloads constructor(
                 val pf = parentFragment as? ConfigurationFragment
                 val isSelected = pf?.isSelectedProfile(proxyEntity.id) == true
                 val isConnected = DataStore.serviceState.started && (proxyEntity.id == DataStore.currentProfile || (isSelected && pf?.isCurrentProfile(proxyEntity.id) == true))
+
+                btnSpeedTest.setOnClickListener {
+                    dialog.dismiss()
+                    pf?.speedTestSingle(proxyEntity)
+                }
 
                 if (isConnected) {
                     btnEdit.alpha = 0.4f
@@ -2946,12 +2953,38 @@ class ConfigurationFragment @JvmOverloads constructor(
                     }
                 }
 
-                if (proxyEntity.type == ProxyEntity.TYPE_CHAIN || proxyEntity.type == ProxyEntity.TYPE_BALANCER) {
-                    btnMore.isGone = true
+                if (!proxyEntity.haveLink()) {
+                    btnQr.isGone = true
+                    btnExportClipboard.isGone = true
                 } else {
-                    btnMore.setOnClickListener {
+                    btnQr.setOnClickListener {
                         dialog.dismiss()
-                        showShareMenu(view, proxyEntity)
+                        try {
+                            currentName = proxyEntity.displayName() ?: ""
+                            val link = if (proxyEntity.haveStandardLink()) {
+                                proxyEntity.toStdLink()
+                            } else {
+                                proxyEntity.requireBean().toUniversalLink()
+                            }
+                            showCode(link)
+                        } catch (e: Exception) {
+                            Logs.w(e)
+                            safeSnackbar(e.readableMessage)
+                        }
+                    }
+                    btnExportClipboard.setOnClickListener {
+                        dialog.dismiss()
+                        try {
+                            val link = if (proxyEntity.haveStandardLink()) {
+                                proxyEntity.toStdLink()
+                            } else {
+                                proxyEntity.requireBean().toUniversalLink()
+                            }
+                            export(link)
+                        } catch (e: Exception) {
+                            Logs.w(e)
+                            safeSnackbar(e.readableMessage)
+                        }
                     }
                 }
 

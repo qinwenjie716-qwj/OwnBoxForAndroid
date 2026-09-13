@@ -11,7 +11,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceViewHolder
 import io.nekohasekai.sagernet.R
+import io.nekohasekai.sagernet.database.DataStore
+import io.nekohasekai.sagernet.ktx.getColorAttr
 import io.nekohasekai.sagernet.utils.Theme
+import com.google.android.material.card.MaterialCardView
 
 class ExpandablePreferenceCategory @JvmOverloads constructor(
     context: Context,
@@ -124,6 +127,21 @@ class ExpandablePreferenceCategory @JvmOverloads constructor(
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         val primaryColor = Theme.getPrimaryColor(context)
+
+        val card = holder.itemView as? MaterialCardView
+        if (card != null) {
+            val ctx = card.context
+            val surface = ctx.getColorAttr(R.attr.colorSurface)
+            card.setCardBackgroundColor(surface)
+            if (DataStore.profileCardStyle == 1) {
+                card.cardElevation = 0f
+                card.strokeWidth = ctx.resources.getDimensionPixelSize(R.dimen.card_stroke_width)
+                card.strokeColor = ctx.getColor(R.color.card_stroke)
+            } else {
+                card.cardElevation = ctx.resources.getDimension(R.dimen.profile_card_elevation_classic)
+                card.strokeWidth = 0
+            }
+        }
 
         val titleView = holder.findViewById(android.R.id.title) as? TextView
         titleView?.setTextColor(primaryColor)
